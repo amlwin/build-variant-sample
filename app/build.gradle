@@ -20,7 +20,34 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
     }
+    flavorDimensions "org"
+    productFlavors {
+        dev {
+            applicationId "com.amlwin.build.dev"
+        }
+        apple {
+            applicationId "com.apple.build"
+
+        }
+        google {
+            applicationId "com.google.build"
+
+        }
+    }
+
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (names.contains("dev") && variant.buildType.name == "release") {
+            setIgnore(true)
+        }
+    }
+
+    sourceSets { google { res.srcDirs = ['src/google/res', 'src/google/res/'] } }
 }
 
 dependencies {
