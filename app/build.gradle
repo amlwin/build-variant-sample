@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -15,6 +19,21 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs{
+        appleConfig{
+            keyAlias keystoreProperties['appleKeyAlias']
+            keyPassword keystoreProperties['appleKeyPassword']
+            storeFile file(keystoreProperties['appleStoreFile'])
+            storePassword keystoreProperties['appleStorePassword']
+        }
+        googleConfig{
+            keyAlias keystoreProperties['googleKeyAlias']
+            keyPassword keystoreProperties['googleKeyPassword']
+            storeFile file(keystoreProperties['googleStoreFile'])
+            storePassword keystoreProperties['googleStorePassword']
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,14 +48,17 @@ android {
     productFlavors {
         dev {
             applicationId "com.amlwin.build.dev"
+            dimension = 'org'
         }
         apple {
             applicationId "com.apple.build"
-
+            dimension = 'org'
+            signingConfig  signingConfigs.appleConfig
         }
         google {
             applicationId "com.google.build"
-
+            dimension = 'org'
+            signingConfig  signingConfigs.appleConfig
         }
     }
 
