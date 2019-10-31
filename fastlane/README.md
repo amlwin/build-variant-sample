@@ -5,7 +5,6 @@ fastlane documentation
 Make sure you have the latest version of the Xcode command line tools installed:
 
 ```
-xcode-select --install
 ```
 
 ## Choose your installation method:
